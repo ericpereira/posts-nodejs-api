@@ -77,7 +77,11 @@ const get = async (req, res) => {
                 knex('posts_unlikes')
                     .count('*')
                     .whereRaw('?? = ??', ['posts_unlikes.post_id', 'posts.id'])
-                    .as('unlikes')
+                    .as('unlikes'),
+                knex('comments')
+                    .count('*')
+                    .whereRaw('?? = ??', ['comments.post_id', 'posts.id'])
+                    .as('comments')
             )
             .where({ id })
             .first()
@@ -112,11 +116,15 @@ const getAll = async (req, res) => {
                 knex('posts_unlikes')
                     .count('*')
                     .whereRaw('?? = ??', ['posts_unlikes.post_id', 'posts.id'])
-                    .as('unlikes')
+                    .as('unlikes'),
+                knex('comments')
+                    .count('*')
+                    .whereRaw('?? = ??', ['comments.post_id', 'posts.id'])
+                    .as('comments')
             )
             .orderBy('id', 'desc')
             .then(response => {
-                logMessage('info', 'User updated', 'controller-posts')
+                logMessage('info', 'Posts info all', 'controller-posts')
                 res.status(200).json({ posts: response })
             })
             .catch(error => {

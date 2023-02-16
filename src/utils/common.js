@@ -35,4 +35,27 @@ const getPostData = async (req, onlyOwner = false) => {
     return { id, user_id, post }
 }
 
-module.exports = { hashPassword, comparePassword, getUser, getPostData}
+const getCommentData = async (req, onlyOwner = false) => {
+    const id = req.params.id
+
+    if(!id) throw Error('comment id invalid!')
+
+    const user_id = req.userId
+
+    const where = onlyOwner ? { id, user_id } : { id }
+
+    const comment = await knex('comments')
+        .where(where)
+        .whereNull('deleted_at')
+        .first()
+
+    if(!comment) throw Error('Comment not found')
+
+    const post = await knex('posts').where({ id: comment.post_id }).first()
+
+    if(!post) throw Error('Post not found')
+
+    return { id, user_id, post, comment }
+}
+
+module.exports = { hashPassword, comparePassword, getUser, getPostData, getCommentData }

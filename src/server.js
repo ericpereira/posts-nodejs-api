@@ -4,6 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const usersRoutes = require('./routes/users')
 const postsRoutes = require('./routes/posts')
+const commentsRoutes = require('./routes/comments')
 
 const app = express()
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use(usersRoutes)
 app.use(postsRoutes)
+app.use(commentsRoutes)
 
 const port = process.env.PORT || '3000'
 

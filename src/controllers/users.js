@@ -140,17 +140,18 @@ const login = async (req, res) => {
         if(!user){
             logMessage('error', 'User not found', 'controller-users')
             res.status(404).json({ error: 'User not found' })
-        }
-
-        const match = await comparePassword(password, user.password);
-
-        if(match) {
-            const token = jwt.sign({ id: user.id, name: user.name, email: user.email }, process.env.TOKEN_HASH, { expiresIn: 60 * 60 });
-            res.status(200).json({ token: `Bearer ${token}` });
         }else{
-            logMessage('error', 'Unauthorized', 'controller-users')
-            res.status(401).json({ error: 'Unauthorized' })
+            const match = await comparePassword(password, user.password);
+
+            if(match) {
+                const token = jwt.sign({ id: user.id, name: user.name, email: user.email }, process.env.TOKEN_HASH, { expiresIn: 60 * 60 });
+                res.status(200).json({ token: `Bearer ${token}` });
+            }else{
+                logMessage('error', 'Unauthorized', 'controller-users')
+                res.status(401).json({ error: 'Unauthorized' })
+            }
         }
+        
     } catch (error) {
         logMessage('error', error.message, 'controller-users')
         res.status(400).json({ error: error.message })
