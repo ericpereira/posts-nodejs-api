@@ -125,6 +125,9 @@ const getAll = async (req, res) => {
             .orderBy('id', 'desc')
             .then(response => {
                 logMessage('info', 'Posts info all', 'controller-posts')
+
+                //increase the post views for all those posts returned here?
+
                 res.status(200).json({ posts: response })
             })
             .catch(error => {
