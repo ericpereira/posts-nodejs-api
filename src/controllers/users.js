@@ -145,7 +145,7 @@ const login = async (req, res) => {
 
             if(match) {
                 const token = jwt.sign({ id: user.id, name: user.name, email: user.email }, process.env.TOKEN_HASH, { expiresIn: 60 * 60 });
-                res.status(200).json({ token: `Bearer ${token}` });
+                res.status(200).json({ token: token });
             }else{
                 logMessage('error', 'Unauthorized', 'controller-users')
                 res.status(401).json({ error: 'Unauthorized' })
